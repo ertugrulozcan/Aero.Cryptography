@@ -1,0 +1,5 @@
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\Aero.Cryptography.dll
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\Aero.Cryptography.pdb
+C:\Projects\Cryptography\Aero.Cryptography\obj\Debug\Aero.Cryptography.csprojResolveAssemblyReference.cache
+C:\Projects\Cryptography\Aero.Cryptography\obj\Debug\Aero.Cryptography.dll
+C:\Projects\Cryptography\Aero.Cryptography\obj\Debug\Aero.Cryptography.pdb
