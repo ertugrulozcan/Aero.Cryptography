@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aero.Cryptography.Algorithms.Contracts
+namespace Aero.Cryptography.Contracts
 {
-    public interface ISignatureKey
+    public interface IPrivateKey
     {
-        BigInteger SignatureKey { get; }
+        BigInteger D { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Aero.Cryptography.Algorithms.Contracts;
+﻿using Aero.Cryptography.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

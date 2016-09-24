@@ -49,15 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\Contracts\IDecryptor.cs" />
-    <Compile Include="Algorithms\Contracts\IEncryptor.cs" />
-    <Compile Include="Algorithms\Contracts\IPatternConverter.cs" />
-    <Compile Include="Algorithms\Contracts\IPrivateKey.cs" />
-    <Compile Include="Algorithms\Contracts\IProvider.cs" />
-    <Compile Include="Algorithms\Contracts\IPublicKey.cs" />
-    <Compile Include="Algorithms\Contracts\ISecret.cs" />
-    <Compile Include="Algorithms\Contracts\ISignatureKey.cs" />
-    <Compile Include="Algorithms\Contracts\ISigner.cs" />
+    <Compile Include="Contracts\IDecryptor.cs" />
+    <Compile Include="Contracts\IEncryptor.cs" />
+    <Compile Include="Contracts\IPatternConverter.cs" />
+    <Compile Include="Contracts\IPrivateKey.cs" />
+    <Compile Include="Contracts\IProvider.cs" />
+    <Compile Include="Contracts\IPublicKey.cs" />
+    <Compile Include="Contracts\ISecret.cs" />
+    <Compile Include="Contracts\ISignatureKey.cs" />
+    <Compile Include="Contracts\ISigner.cs" />
     <Compile Include="Algorithms\Rsa\Cypher.cs" />
     <Compile Include="Algorithms\Rsa\Decoder.cs" />
     <Compile Include="Algorithms\Rsa\Encoder.cs" />
@@ -71,9 +71,7 @@
     <Compile Include="Utilities\BigIntegerExtensions.cs" />
     <Compile Include="Utilities\TrigintaHex.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Algorithms\Aes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

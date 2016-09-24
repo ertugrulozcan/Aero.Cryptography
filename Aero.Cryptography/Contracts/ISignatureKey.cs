@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aero.Cryptography.Algorithms.Contracts
+namespace Aero.Cryptography.Contracts
 {
-    public interface ISecret
+    public interface ISignatureKey
     {
-        BigInteger Value { get; }
-        
-        byte[] Sign { get; set; }
+        BigInteger SignatureKey { get; }
     }
 }

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aero.Cryptography.Algorithms.Contracts
+namespace Aero.Cryptography.Contracts
 {
-    public interface IEncryptor
+    public interface IDecryptor
     {
-        ISecret Encrypt(byte[] obj);
-        ISecret Encrypt(byte[] obj, IPublicKey publicKey);
+        byte[] Decrypt(ISecret crypto);
+        byte[] Decrypt(ISecret crypto, IPrivateKey privateKey);
         IPatternConverter PatternConverter { get; }
     }
 }
