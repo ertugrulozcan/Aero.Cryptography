@@ -1,4 +1,5 @@
-﻿using Aero.Cryptography.Algorithms.Rsa;
+﻿using Aero.Cryptography.Algorithms.Contracts;
+using Aero.Cryptography.Algorithms.Rsa;
 using Aero.Cryptography.Utilities;
 using System;
 using System.Collections.Generic;
@@ -22,43 +23,107 @@ namespace Aero.Cryptography.Test
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RsaProvider rsa;
+        /// <summary>
+        /// Rsa Provider
+        /// </summary>
+        private RsaProvider Rsa { get; set; }
 
+        /// <summary>
+        /// Encrypted Data
+        /// </summary>
+        private ISecret Secret { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            this.rsa = new RsaProvider(RsaProvider.BitLength.RSA1024);
+            this.Rsa = new RsaProvider(RsaProvider.BitLength.RSA512);
         }
 
+        /// <summary>
+        /// Encrypt Button Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Clear();
+
             try
             {
+                // Text to byte array as selected encoding procedure
                 byte[] data;
-                if (rsa.Encoder.PatternConverter == null)
+                if (Rsa.Encoder.PatternConverter == null)
                     data = System.Text.Encoding.Unicode.GetBytes(this.InputTextBox.Text);
                 else
-                    data = rsa.Encoder.PatternConverter.EncodingProcedure.GetBytes(this.InputTextBox.Text);
+                    data = Rsa.Encoder.PatternConverter.EncodingProcedure.GetBytes(this.InputTextBox.Text);
+                
+                // Encrypt
+                this.Secret = Rsa.Encoder.Encrypt(data);
 
-                this.OutputTextBox.Text = rsa.Encoder.Encrypt(data).ToString();
+                // Sign
+                if (this.IsSignCheckBox.IsChecked.Value)
+                {
+                    this.Secret.Sign = this.Rsa.Signer.Sign(data);
+                }
+
+                // Print result
+                this.OutputTextBox.Text = this.Secret.ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Hata");
             }
         }
-
+        
+        /// <summary>
+        /// Decrypt Button Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DecryptButton_Click(object sender, RoutedEventArgs e)
         {
-            Algorithms.Contracts.ISecret secret = new Cypher(this.OutputTextBox.Text);
-            byte[] message = this.rsa.Decoder.Decrypt(secret);
+            // Decrypt
+            byte[] message = this.Rsa.Decoder.Decrypt(this.Secret);
 
-            if (rsa.Decoder.PatternConverter == null)
-                this.DecryptionResultTextBox.Text = System.Text.Encoding.Unicode.GetString(message);
+            Encoding encodingProcedure;
+            if (Rsa.Decoder.PatternConverter == null)
+                encodingProcedure = System.Text.Encoding.Unicode;
             else
-                this.DecryptionResultTextBox.Text = rsa.Decoder.PatternConverter.EncodingProcedure.GetString(message);            
+                encodingProcedure = Rsa.Decoder.PatternConverter.EncodingProcedure;
+
+            // Print to result
+            this.DecryptionResultTextBox.Text = encodingProcedure.GetString(message);
+            
+            // Signature verification
+            if (this.Secret.Sign == null)
+            {
+                this.SignatureVerificationTextBlock.Text = "Data is unsigned.";
+                this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.DarkOrange);
+            }
+            else
+            {
+                bool isVerified = this.Rsa.Signer.Verify(message, this.Secret.Sign);
+                if (isVerified)
+                {
+                    this.SignatureVerificationTextBlock.Text = "Signature verified.";
+                    this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
+                }
+                else
+                {
+                    this.SignatureVerificationTextBlock.Text = "Signature not verified!";
+                    this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+                }
+            }
         }
 
+        /// <summary>
+        /// Test Button Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
             //byte[] bytes = Encoding.UTF8.GetBytes(this.TestTextBox.Text);
@@ -68,6 +133,13 @@ namespace Aero.Cryptography.Test
             //Cypher secret = new Cypher(new BigInteger(9716));
             //var cypher = this.rsa.Encoder.Encrypt(secret);
             //MessageBox.Show(this.rsa.Decoder.Decrypt(cypher).ToString());
+        }
+
+        private void Clear()
+        {
+            this.DecryptionResultTextBox.Text = string.Empty;
+            this.SignatureVerificationTextBlock.Text = string.Empty;
+            this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Black);
         }
     }
 }
