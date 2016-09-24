@@ -58,6 +58,9 @@ namespace Aero.Cryptography.Utilities
 
         public BigInteger ConvertToBigInteger(byte[] bytes)
         {
+            if (bytes == null)
+                return 0;
+
             string bigStr = string.Empty;
 
             foreach (byte no in bytes)
@@ -117,62 +120,5 @@ namespace Aero.Cryptography.Utilities
 }
 
 /*
-
-private String ConvertToString(BigIntegerEx number)
-{
-    // Sonuç stringi
-    String result = string.Empty;
-
-    // Her bir karakterin bit uzunluğu;
-    int width = 7;
-
-    // 1. ADIM : Sayı ikilik tabana çevirilir.
-    String binary = number.ToString(2);
-
-    // 3. ADIM : Sayı width*x >= bitLength formuna tamamlanana kadar başına 0 eklenir
-    if (binary.Length % width != 0)
-    {
-        int d = width - binary.Length % width;
-        for (int i = 0; i < d; i++)
-            binary = "0" + binary;
-    }
-
-    // 4. ADIM : Sayının 7'şer bitlik (width) parçalara ayrılması
-    // Her parçanın karşılığı olan karakter sonuç stringine eklenir.
-    for (int i = 0; i < binary.Length - width + 1; i += width)
-        result += Convert.ToChar(Convert.ToInt32(binary.Substring(i, width), 2));
-
-    return result;
-}
-
-private BigIntegerEx ConvertToBigInteger(String text)
-{
-    int width = 7;
-
-    String binary = string.Empty;
-    // 1. ADIM : Parametre olarak verilen metin, karakter karakter ikilik tabana çevrilerek binary stringine eklenir.
-
-    for (int i = 0; i < text.Length; i++)
-    {
-        int index = (int)text[i];
-        binary += ConvertToBinary(index, width);
-    }
-
-    return new BigIntegerEx(binary, 2);
-}
-
-private static string ConvertToBinary(int x, int minLength)
-{
-    String result = Convert.ToString(x, 2);
-
-    if (result.Length < minLength)
-    {
-        int d = minLength - result.Length;
-        for (int j = 0; j < d; j++)
-            result = "0" + result;
-    }
-
-    return result;
-}
 
 */
