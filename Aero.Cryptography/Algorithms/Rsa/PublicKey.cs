@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Aero.Cryptography.Algorithms.Rsa
 {
-    public class PublicKey : IPublicKey
+    public class PublicKey : IPublicKey, ISignatureKey
     {
         private BigInteger e;
         private BigInteger n;
@@ -36,6 +36,14 @@ namespace Aero.Cryptography.Algorithms.Rsa
             private set
             {
                 n = value;
+            }
+        }
+
+        public BigInteger SignatureKey
+        {
+            get
+            {
+                return this.E;
             }
         }
 

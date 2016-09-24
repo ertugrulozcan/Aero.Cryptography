@@ -10,5 +10,6 @@ namespace Aero.Cryptography.Algorithms.Contracts
     {
         IEncryptor Encoder { get; }
         IDecryptor Decoder { get; }
+        ISigner Signer { get; }
     }
 }

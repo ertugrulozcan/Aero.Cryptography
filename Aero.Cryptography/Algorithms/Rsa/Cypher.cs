@@ -27,25 +27,54 @@ namespace Aero.Cryptography.Algorithms.Rsa
 
         public BigInteger Value { get; private set; }
 
+        public byte[] Sign { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public Cypher(BigInteger value)
+        public Cypher(BigInteger value, byte[] sign = null)
         {
             this.TrigintaHexValue = new TrigintaHex(value);
+            this.Sign = sign;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Cypher(string str)
+        public Cypher(string str, byte[] sign = null)
         {
             this.TrigintaHexValue = TrigintaHex.Parse(str);
+            this.Sign = sign;
         }
 
         public override string ToString()
         {
-            return this.TrigintaHexValue.ToString(4);
+            string cert = string.Empty;
+
+            string cypher = this.TrigintaHexValue.ToString(4);
+
+            cert += "<secret>" + Environment.NewLine;
+            cert += "\t";
+            cert += "<cypher length=\"" + cypher.Length + "\">" + Environment.NewLine;
+            cert += "\t";
+            cert += "\t";
+            cert += cypher + Environment.NewLine;
+            cert += "\t";
+            cert += "</cypher>" + Environment.NewLine;
+
+            string sign = (this.Sign != null ? BasicPatternConverter.Current.ConvertToBigInteger(this.Sign).ToString(16) : string.Empty);
+
+            cert += "\t";
+            cert += "<sign length=\"" + sign.Length + "\">" + Environment.NewLine;
+            cert += "\t";
+            cert += "\t";
+            cert += sign + Environment.NewLine;
+            cert += "\t";
+            cert += "</sign>" + Environment.NewLine;
+
+            cert += "</secret>";
+
+            return cert;
         }
     }
 }

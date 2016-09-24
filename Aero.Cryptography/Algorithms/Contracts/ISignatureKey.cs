@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Aero.Cryptography.Algorithms.Contracts
 {
-    public interface ISecret
+    public interface ISignatureKey
     {
-        BigInteger Value { get; }
-        
-        byte[] Sign { get; set; }
+        BigInteger SignatureKey { get; }
     }
 }

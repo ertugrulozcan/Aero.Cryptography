@@ -34,6 +34,7 @@ namespace Aero.Cryptography.Algorithms.Rsa
 
         private IEncryptor encoder;
         private IDecryptor decoder;
+        private ISigner signer;
 
         #endregion
 
@@ -63,10 +64,22 @@ namespace Aero.Cryptography.Algorithms.Rsa
             }
         }
 
+        public ISigner Signer
+        {
+            get
+            {
+                return this.signer;
+            }
+            private set
+            {
+                this.signer = value;
+            }
+        }
+
         #endregion
 
         #region Constructors
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -90,8 +103,13 @@ namespace Aero.Cryptography.Algorithms.Rsa
                 BigInteger e = this.GenerateE();
                 BigInteger d = this.GenerateD(e, totient);
 
-                this.Encoder = new Encoder(new PublicKey(e, n));
-                this.Decoder = new Decoder(new PrivateKey(d, n));
+                var publicKey = new PublicKey(e, n);
+                var privateKey = new PrivateKey(d, n);
+
+                this.Encoder = new Encoder(publicKey);
+                this.Decoder = new Decoder(privateKey);
+
+                this.Signer = new RsaSigner(privateKey, publicKey);
 
                 isValid = this.IsValid(totient, e);
             }
@@ -138,7 +156,6 @@ namespace Aero.Cryptography.Algorithms.Rsa
 
         private BigInteger GenerateE()
         {
-            // e sayısı sabit değer olarak alınabilir.
             return new BigInteger(65537);
         }
         
