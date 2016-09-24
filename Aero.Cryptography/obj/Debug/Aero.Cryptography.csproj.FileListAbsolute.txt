@@ -3,3 +3,7 @@ C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\Aero.Cryptography.pdb
 C:\Projects\Cryptography\Aero.Cryptography\obj\Debug\Aero.Cryptography.csprojResolveAssemblyReference.cache
 C:\Projects\Cryptography\Aero.Cryptography\obj\Debug\Aero.Cryptography.dll
 C:\Projects\Cryptography\Aero.Cryptography\obj\Debug\Aero.Cryptography.pdb
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3.dll
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3Managed.dll
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3.pdb
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3Managed.pdb

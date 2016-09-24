@@ -14,3 +14,5 @@ C:\Projects\Cryptography\Aero.Cryptography.Test\obj\Debug\Aero.Cryptography.Test
 C:\Projects\Cryptography\Aero.Cryptography.Test\obj\Debug\Aero.Cryptography.Test.pdb
 C:\Projects\Cryptography\Aero.Cryptography.Test\bin\Debug\Aero.Cryptography.dll
 C:\Projects\Cryptography\Aero.Cryptography.Test\bin\Debug\Aero.Cryptography.pdb
+C:\Projects\Cryptography\Aero.Cryptography.Test\bin\Debug\SHA3Managed.dll
+C:\Projects\Cryptography\Aero.Cryptography.Test\bin\Debug\SHA3Managed.pdb
