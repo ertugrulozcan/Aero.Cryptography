@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aero.Cryptography.Utilities;
+using System.Xml;
 
 namespace Aero.Cryptography.Algorithms.Rsa
 {
@@ -24,10 +25,16 @@ namespace Aero.Cryptography.Algorithms.Rsa
                 this.Value = this.trigintaHexValue.Value;
             }
         }
-
+        
         public BigInteger Value { get; private set; }
-
+        
         public byte[] Sign { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Cypher()
+        { }
 
         /// <summary>
         /// Constructor
@@ -46,35 +53,79 @@ namespace Aero.Cryptography.Algorithms.Rsa
             this.TrigintaHexValue = TrigintaHex.Parse(str);
             this.Sign = sign;
         }
-
-        public override string ToString()
+        
+        public string Serialize()
         {
             string cert = string.Empty;
 
-            string cypher = this.TrigintaHexValue.ToString(4);
+            string cypher = this.TrigintaHexValue.ToString(4, 10);
 
-            cert += "<secret>" + Environment.NewLine;
-            cert += "\t";
-            cert += "<cypher length=\"" + cypher.Length + "\">" + Environment.NewLine;
-            cert += "\t";
-            cert += "\t";
-            cert += cypher + Environment.NewLine;
-            cert += "\t";
-            cert += "</cypher>" + Environment.NewLine;
+            cert += this.PrettifyXmlRow("<secret>", 0);
+            cert += this.PrettifyXmlRow("<cypher length=\"" + cypher.Length + "\">", 1);
+            cert += this.PrettifyXmlRow(cypher, 2);
+            cert += this.PrettifyXmlRow("</cypher>", 1);
 
-            string sign = (this.Sign != null ? BasicPatternConverter.Current.ConvertToBigInteger(this.Sign).ToString(16) : string.Empty);
+            string sign = (this.Sign != null ? new BigInteger(this.Sign).ToString(16) : string.Empty);
+            
+            cert += this.PrettifyXmlRow("<sign length=\"" + sign.Length + "\">", 1);
+            cert += this.PrettifyXmlRow(sign, 2);
+            cert += this.PrettifyXmlRow("</sign>", 1);
 
-            cert += "\t";
-            cert += "<sign length=\"" + sign.Length + "\">" + Environment.NewLine;
-            cert += "\t";
-            cert += "\t";
-            cert += sign + Environment.NewLine;
-            cert += "\t";
-            cert += "</sign>" + Environment.NewLine;
-
-            cert += "</secret>";
+            cert += this.PrettifyXmlRow("</secret>", 0);
 
             return cert;
+        }
+
+        private string PrettifyXmlRow(string rowStr, int indentLevel)
+        {
+            string tabs = string.Empty;
+            for (int i = 0; i < indentLevel; i++)
+                tabs += "\t";
+
+            return tabs + rowStr.Replace(Environment.NewLine, Environment.NewLine + tabs) + Environment.NewLine;
+        }
+
+        public void Deserialize(string xmlStr)
+        {
+            try
+            {
+                string cypherStr = null;
+                string signStr = null;
+                
+                XmlTextReader xmlReader = new XmlTextReader(new System.IO.StringReader(xmlStr));
+                string pivotElement = null;
+                while (xmlReader.Read())
+                {
+                    switch (xmlReader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            {
+                                pivotElement = xmlReader.Name;
+                            }
+                            break;
+                        case XmlNodeType.Text:
+                            {
+                                if (pivotElement == "cypher")
+                                    cypherStr = xmlReader.Value;
+                                else if (pivotElement == "sign")
+                                    signStr = xmlReader.Value;
+                            }
+                            break;
+                    }
+                }
+
+                byte[] sign = null;
+                if (!string.IsNullOrEmpty(signStr))
+                    sign = new BigInteger(signStr, 16).getBytes();
+
+                Cypher cypher = new Cypher(new BigInteger(TrigintaHex.Parse(cypherStr).Value), sign);
+                this.TrigintaHexValue = cypher.TrigintaHexValue;
+                this.Sign = cypher.Sign;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         }
     }
 }

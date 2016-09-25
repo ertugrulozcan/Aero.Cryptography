@@ -12,5 +12,8 @@ namespace Aero.Cryptography.Contracts
         BigInteger Value { get; }
         
         byte[] Sign { get; set; }
+
+        string Serialize();
+        void Deserialize(string jsonStr);
     }
 }

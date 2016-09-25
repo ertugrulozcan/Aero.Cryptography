@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Aero.Cryptography Test" 
-        Height="350" Width="525">
+        Height="400" Width="720">
 
     <Grid>
         <Border Padding="10">

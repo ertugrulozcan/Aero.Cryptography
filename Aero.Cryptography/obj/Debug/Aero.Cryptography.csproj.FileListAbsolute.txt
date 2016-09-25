@@ -7,3 +7,5 @@ C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3.dll
 C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3Managed.dll
 C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3.pdb
 C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\SHA3Managed.pdb
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\Newtonsoft.Json.dll
+C:\Projects\Cryptography\Aero.Cryptography\bin\Debug\Newtonsoft.Json.xml

@@ -176,6 +176,27 @@ namespace Aero.Cryptography.Utilities
             return this.StringValue;
         }
 
+        public string ToString(int partLength, int rowPartCount)
+        {
+            string text = this.ToString(partLength);
+
+            var parts = text.Split(' ');
+            text = string.Empty;
+            int c = 1;
+            for (int i = 0; i < parts.Length; i++)
+            {
+                text += parts[i] + " ";
+
+                if (c++ == rowPartCount && i < parts.Length - 1)
+                {
+                    text += Environment.NewLine;
+                    c = 1;
+                }
+            }
+
+            return text;
+        }
+
         public string ToString(int partLength)
         {
             if (string.IsNullOrEmpty(this.StringValue))

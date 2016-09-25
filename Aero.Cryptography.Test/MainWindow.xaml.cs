@@ -29,11 +29,6 @@ namespace Aero.Cryptography.Test
         private RsaProvider Rsa { get; set; }
 
         /// <summary>
-        /// Encrypted Data
-        /// </summary>
-        private ISecret Secret { get; set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public MainWindow()
@@ -61,16 +56,16 @@ namespace Aero.Cryptography.Test
                     data = Rsa.Encoder.PatternConverter.EncodingProcedure.GetBytes(this.InputTextBox.Text);
                 
                 // Encrypt
-                this.Secret = Rsa.Encoder.Encrypt(data);
+                var secret = Rsa.Encoder.Encrypt(data);
 
                 // Sign
                 if (this.IsSignCheckBox.IsChecked.Value)
                 {
-                    this.Secret.Sign = this.Rsa.Signer.Sign(data);
+                    secret.Sign = this.Rsa.Signer.Sign(data);
                 }
 
                 // Print result
-                this.OutputTextBox.Text = this.Secret.ToString();
+                this.OutputTextBox.Text = secret.Serialize();
             }
             catch (Exception ex)
             {
@@ -85,37 +80,47 @@ namespace Aero.Cryptography.Test
         /// <param name="e"></param>
         private void DecryptButton_Click(object sender, RoutedEventArgs e)
         {
-            // Decrypt
-            byte[] message = this.Rsa.Decoder.Decrypt(this.Secret);
-
-            Encoding encodingProcedure;
-            if (Rsa.Decoder.PatternConverter == null)
-                encodingProcedure = System.Text.Encoding.Unicode;
-            else
-                encodingProcedure = Rsa.Decoder.PatternConverter.EncodingProcedure;
-
-            // Print to result
-            this.DecryptionResultTextBox.Text = encodingProcedure.GetString(message);
-            
-            // Signature verification
-            if (this.Secret.Sign == null)
+            try
             {
-                this.SignatureVerificationTextBlock.Text = "Data is unsigned.";
-                this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.DarkOrange);
-            }
-            else
-            {
-                bool isVerified = this.Rsa.Signer.Verify(message, this.Secret.Sign);
-                if (isVerified)
+                var secret = new Cypher();
+                secret.Deserialize(this.OutputTextBox.Text);
+
+                // Decrypt
+                byte[] message = this.Rsa.Decoder.Decrypt(secret);
+
+                Encoding encodingProcedure;
+                if (Rsa.Decoder.PatternConverter == null)
+                    encodingProcedure = System.Text.Encoding.Unicode;
+                else
+                    encodingProcedure = Rsa.Decoder.PatternConverter.EncodingProcedure;
+
+                // Print to result
+                this.DecryptionResultTextBox.Text = encodingProcedure.GetString(message);
+
+                // Signature verification
+                if (secret.Sign == null)
                 {
-                    this.SignatureVerificationTextBlock.Text = "Signature verified.";
-                    this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
+                    this.SignatureVerificationTextBlock.Text = "Data is unsigned.";
+                    this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.DarkOrange);
                 }
                 else
                 {
-                    this.SignatureVerificationTextBlock.Text = "Signature not verified!";
-                    this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+                    bool isVerified = this.Rsa.Signer.Verify(message, secret.Sign);
+                    if (isVerified)
+                    {
+                        this.SignatureVerificationTextBlock.Text = "Signature verified.";
+                        this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
+                    }
+                    else
+                    {
+                        this.SignatureVerificationTextBlock.Text = "Signature not verified!";
+                        this.SignatureVerificationTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Hata");
             }
         }
 

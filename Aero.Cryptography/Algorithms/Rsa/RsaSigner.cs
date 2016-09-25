@@ -50,7 +50,7 @@ namespace Aero.Cryptography.Algorithms.Rsa
                 var hash = this.Hash(data);
 
                 if (new BigInteger(hash) > privateKey.N)
-                    throw new Exception("Hash function is not suitable for signature");
+                    throw new Exception("Hash function is not suitable for signature.");
 
                 BigInteger c = new BigInteger(hash);
                 var sign = c.modPow(privateKey.D, privateKey.N);
