@@ -11,6 +11,9 @@ namespace Aero.Cryptography.Algorithms.Rsa
 {
     public class Cypher : ISecret
     {
+        public readonly string CryptoAlgorithm;
+        public string SignAlgorithm { get; set; }
+
         private TrigintaHex trigintaHexValue;
         
         public TrigintaHex TrigintaHexValue
@@ -39,19 +42,25 @@ namespace Aero.Cryptography.Algorithms.Rsa
         /// <summary>
         /// Constructor
         /// </summary>
-        public Cypher(BigInteger value, byte[] sign = null)
+        public Cypher(BigInteger value, byte[] sign = null, string cryptoAlgorithm = "", string signAlgorithm = "")
         {
             this.TrigintaHexValue = new TrigintaHex(value);
             this.Sign = sign;
+
+            this.CryptoAlgorithm = cryptoAlgorithm;
+            this.SignAlgorithm = signAlgorithm;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Cypher(string str, byte[] sign = null)
+        public Cypher(string str, byte[] sign = null, string cryptoAlgorithm = "", string signAlgorithm = "")
         {
             this.TrigintaHexValue = TrigintaHex.Parse(str);
             this.Sign = sign;
+
+            this.CryptoAlgorithm = cryptoAlgorithm;
+            this.SignAlgorithm = signAlgorithm;
         }
         
         public string Serialize()
@@ -61,13 +70,13 @@ namespace Aero.Cryptography.Algorithms.Rsa
             string cypher = this.TrigintaHexValue.ToString(4, 10);
 
             cert += this.PrettifyXmlRow("<secret>", 0);
-            cert += this.PrettifyXmlRow("<cypher length=\"" + cypher.Length + "\">", 1);
+            cert += this.PrettifyXmlRow("<cypher length=\"" + cypher.Length + "\"" + " algorithm=\"" + this.CryptoAlgorithm + "\">", 1);
             cert += this.PrettifyXmlRow(cypher, 2);
             cert += this.PrettifyXmlRow("</cypher>", 1);
 
             string sign = (this.Sign != null ? new BigInteger(this.Sign).ToString(16) : string.Empty);
             
-            cert += this.PrettifyXmlRow("<sign length=\"" + sign.Length + "\">", 1);
+            cert += this.PrettifyXmlRow("<sign length=\"" + sign.Length + "\"" + " algorithm=\"" + this.SignAlgorithm + "\">", 1);
             cert += this.PrettifyXmlRow(sign, 2);
             cert += this.PrettifyXmlRow("</sign>", 1);
 

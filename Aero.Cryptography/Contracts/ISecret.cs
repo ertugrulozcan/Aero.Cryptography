@@ -13,6 +13,8 @@ namespace Aero.Cryptography.Contracts
         
         byte[] Sign { get; set; }
 
+        string SignAlgorithm { get; set; }
+
         string Serialize();
         void Deserialize(string jsonStr);
     }

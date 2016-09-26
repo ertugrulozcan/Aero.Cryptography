@@ -62,6 +62,7 @@ namespace Aero.Cryptography.Test
                 if (this.IsSignCheckBox.IsChecked.Value)
                 {
                     secret.Sign = this.Rsa.Signer.Sign(data);
+                    secret.SignAlgorithm = this.Rsa.Signer.SignatureAlgorithm;
                 }
 
                 // Print result
@@ -94,7 +95,7 @@ namespace Aero.Cryptography.Test
                 else
                     encodingProcedure = Rsa.Decoder.PatternConverter.EncodingProcedure;
 
-                // Print to result
+                // Print result
                 this.DecryptionResultTextBox.Text = encodingProcedure.GetString(message);
 
                 // Signature verification

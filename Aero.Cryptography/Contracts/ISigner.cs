@@ -11,6 +11,8 @@ namespace Aero.Cryptography.Contracts
         ISignatureKey SignatureKey { get; }
         ISignatureKey VerificationKey { get; }
 
+        string SignatureAlgorithm { get; }
+
         // Hash
         byte[] Hash(byte[] data);
 

@@ -20,6 +20,14 @@ namespace Aero.Cryptography.Algorithms.Rsa
             get;
         }
 
+        public string SignatureAlgorithm
+        {
+            get
+            {
+                return "SHA-3";
+            }
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>

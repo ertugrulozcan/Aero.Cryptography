@@ -10,6 +10,8 @@ namespace Aero.Cryptography.Algorithms.Rsa
 {
     public class Encoder : IEncryptor
     {
+        public readonly string CryptoAlgorithm;
+
         private IPatternConverter patternConverter;
 
         private PublicKey RsaPublicKey { get; set; }
@@ -31,9 +33,11 @@ namespace Aero.Cryptography.Algorithms.Rsa
         /// Constructor 1
         /// </summary>
         /// <param name="publicKey"></param>
-        internal Encoder(PublicKey publicKey)
+        internal Encoder(PublicKey publicKey, string CryptoAlgorithm = "")
         {
             this.RsaPublicKey = publicKey;
+
+            this.CryptoAlgorithm = CryptoAlgorithm;
         }
 
         /// <summary>
@@ -41,10 +45,12 @@ namespace Aero.Cryptography.Algorithms.Rsa
         /// </summary>
         /// <param name="publicKey"></param>
         /// <param name="patternConverter"></param>
-        internal Encoder(PublicKey publicKey, IPatternConverter patternConverter)
+        internal Encoder(PublicKey publicKey, IPatternConverter patternConverter, string CryptoAlgorithm = "")
         {
             this.RsaPublicKey = publicKey;
             this.PatternConverter = patternConverter;
+
+            this.CryptoAlgorithm = CryptoAlgorithm;
         }
 
         public ISecret Encrypt(byte[] obj)
@@ -57,7 +63,7 @@ namespace Aero.Cryptography.Algorithms.Rsa
                 if (m > this.RsaPublicKey.N)
                     throw new Exception("Message is too long!");
 
-                return new Cypher(m.modPow(this.RsaPublicKey.E, this.RsaPublicKey.N));
+                return new Cypher(m.modPow(this.RsaPublicKey.E, this.RsaPublicKey.N), null, this.CryptoAlgorithm);
             }
             else
                 throw new Exception("PublicKey format was not RsaPublicKey");
@@ -73,7 +79,7 @@ namespace Aero.Cryptography.Algorithms.Rsa
                 if (m > this.RsaPublicKey.N)
                     throw new Exception("Message is too long!");
 
-                return new Cypher(m.modPow((publicKey as PublicKey).E, (publicKey as PublicKey).N));
+                return new Cypher(m.modPow((publicKey as PublicKey).E, (publicKey as PublicKey).N), null, this.CryptoAlgorithm);
             }
             else
                 throw new Exception("PublicKey format was not RsaPublicKey");

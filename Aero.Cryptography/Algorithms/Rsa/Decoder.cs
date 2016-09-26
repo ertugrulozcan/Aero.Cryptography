@@ -10,6 +10,8 @@ namespace Aero.Cryptography.Algorithms.Rsa
 {
     class Decoder : IDecryptor
     {
+        public readonly string CryptoAlgorithm;
+
         private IPatternConverter patternConverter;
 
         private PrivateKey RsaPrivateKey { get; set; }
@@ -31,9 +33,11 @@ namespace Aero.Cryptography.Algorithms.Rsa
         /// Constructor 1
         /// </summary>
         /// <param name="privateKey"></param>
-        internal Decoder(PrivateKey privateKey)
+        internal Decoder(PrivateKey privateKey, string CryptoAlgorithm = "")
         {
             this.RsaPrivateKey = privateKey;
+
+            this.CryptoAlgorithm = CryptoAlgorithm;
         }
 
         /// <summary>
@@ -41,10 +45,12 @@ namespace Aero.Cryptography.Algorithms.Rsa
         /// </summary>
         /// <param name="privateKey"></param>
         /// <param name="patternConverter"></param>
-        internal Decoder(PrivateKey privateKey, IPatternConverter patternConverter)
+        internal Decoder(PrivateKey privateKey, IPatternConverter patternConverter, string CryptoAlgorithm = "")
         {
             this.RsaPrivateKey = privateKey;
             this.PatternConverter = patternConverter;
+
+            this.CryptoAlgorithm = CryptoAlgorithm;
         }
 
         public byte[] Decrypt(ISecret crypto)

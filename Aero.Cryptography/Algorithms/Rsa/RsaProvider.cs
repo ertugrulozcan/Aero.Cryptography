@@ -26,7 +26,7 @@ namespace Aero.Cryptography.Algorithms.Rsa
     {
         #region Constants
 
-        private readonly int BITLENGTH;
+        private readonly BitLength BITLENGTH;
 
         #endregion
 
@@ -76,6 +76,14 @@ namespace Aero.Cryptography.Algorithms.Rsa
             }
         }
 
+        public string Algorithm
+        {
+            get
+            {
+                return this.BITLENGTH.ToString();
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -83,19 +91,20 @@ namespace Aero.Cryptography.Algorithms.Rsa
         /// <summary>
         /// Constructor
         /// </summary>
-        public RsaProvider(BitLength bitLength)
+        public RsaProvider(BitLength rsaBitLength)
         {
-            this.BITLENGTH = this.GetBitLength(bitLength);
+            this.BITLENGTH = rsaBitLength;
+            int bitLength = this.GetBitLength(this.BITLENGTH);
 
             bool isValid = false;
             do
             {
-                BigInteger p = this.GenerateBigPrime(this.BITLENGTH);
-                BigInteger q = this.GenerateBigPrime(this.BITLENGTH);
+                BigInteger p = this.GenerateBigPrime(bitLength);
+                BigInteger q = this.GenerateBigPrime(bitLength);
 
                 // (q, p'den farklı bir değerde olmalıdır)
                 while (p == q)
-                    q = this.GenerateBigPrime(this.BITLENGTH);
+                    q = this.GenerateBigPrime(bitLength);
 
                 BigInteger n = p * q;
 
@@ -106,8 +115,8 @@ namespace Aero.Cryptography.Algorithms.Rsa
                 var publicKey = new PublicKey(e, n);
                 var privateKey = new PrivateKey(d, n);
 
-                this.Encoder = new Encoder(publicKey);
-                this.Decoder = new Decoder(privateKey);
+                this.Encoder = new Encoder(publicKey, this.Algorithm);
+                this.Decoder = new Decoder(privateKey, this.Algorithm);
 
                 this.Signer = new RsaSigner(privateKey, publicKey);
 
